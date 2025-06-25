@@ -7,6 +7,10 @@ from rag.indexer import load_vector_index  # Supondo que exista para carregar FA
 # Carrega o índice vetorial para uso no RAG
 index = load_vector_index()
 
+def carregar_prompt_base(caminho="./prompts/prompt_base.md"):
+    with open(caminho, "r", encoding="utf-8") as f:
+        return f.read()
+
 # Função apenas com RAG
 def consultar_contexto(pergunta: str) -> str:
     """Consulta usando apenas o RAG."""
@@ -28,7 +32,7 @@ tools = [
 
 # Prompt com placeholders esperados
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "Você é um sommelier digital. Ajude com perguntas sobre vinhos, harmonizações e onde comprar."),
+    ("system", carregar_prompt_base()),
     ("user", "{input}"),
     MessagesPlaceholder(variable_name="agent_scratchpad")
 ])
