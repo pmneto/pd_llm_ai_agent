@@ -1,20 +1,41 @@
+import os
 import streamlit as st
-from utils.agent import build_agent
+from dotenv import load_dotenv
 
-st.set_page_config(page_title="CariocaWine - SommelierGPT", layout="centered")
+# ✅ DEVE SER A PRIMEIRA CHAMADA STREAMLIT!
+st.set_page_config(page_title="CariocaWine", page_icon="🍷")
 
-st.title("🍷 CariocaWine - SommelierGPT")
-st.markdown("Fala comigo! Manda tua pergunta sobre vinho, harmonização, tipos de uva ou qualquer curiosidade enológica com o jeitinho carioca.")
+load_dotenv()
 
-# Cria o agente
-agent = build_agent()
+from utils.download_docs import baixar_pdfs
+from rag.loader import load_docs
+from rag.indexer import load_vector_index, create_index
+from agents.wine_agent import build_agent  # já pode vir aqui mesmo
 
-# Caixa de input
-user_input = st.text_input("Digite sua pergunta:")
+INDEX_PATH = "data/index_faiss"
 
-if st.button("Perguntar") and user_input:
-    resposta = agent.run(
-        f"Você é o SommelierGPT, um especialista em vinhos, leve, informal e carioca. Responda com simpatia e conhecimento. Pergunta: {user_input}"
-    )
-    st.markdown("### 🍇 Resposta do SommelierGPT:")
-    st.write(resposta)
+def preparar_indice():
+    if not os.path.exists(INDEX_PATH) or not os.path.exists(os.path.join(INDEX_PATH, "index.faiss")):
+        st.warning("📦 Índice vetorial não encontrado. Preparando ambiente...")
+        baixar_pdfs("data/docs")
+        chunks = load_docs("data/docs")
+        create_index(chunks)
+        st.success("✅ PDFs baixados e índice criado com sucesso!")
+    else:
+        st.info("🧠 Índice encontrado. Pronto para uso!")
+
+def main():
+    preparar_indice()
+
+    st.title("🍷 CariocaWine - Seu Sommelier Digital")
+    query = st.text_input("O que deseja saber sobre vinhos, harmonizações ou onde comprar?")
+
+    if query:
+        with st.spinner("Consultando o sommelier virtual..."):
+            agent = build_agent()
+            resposta = agent.invoke({"input": query})
+        st.success("Resultado:")
+        st.write(resposta)
+
+if __name__ == "__main__":
+    main()
