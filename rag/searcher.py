@@ -6,13 +6,14 @@ from langchain.schema import Document
 
 def search_context(pergunta: str, index: Union[VectorStore, any], k: int = 3) -> str:
     """
-    Realiza uma busca vetorial no índice e retorna um contexto formatado.
+    Runs a vector search on the index and returns a nicely formatted context.
 
-    :param pergunta: Pergunta do usuário.
-    :param index: Objeto do índice vetorial (FAISS, Chroma, etc).
-    :param k: Número de documentos mais similares a retornar.
-    :return: Texto concatenado com os trechos mais relevantes.
+    :param pergunta: The user's question.
+    :param index: The vector index object (e.g., FAISS, Chroma).
+    :param k: Number of top similar documents to fetch.
+    :return: Combined text with the most relevant snippets.
     """
+
     if not pergunta or not index:
         return ""
 

@@ -6,28 +6,42 @@ from io import BytesIO
 PDFS = {
     "guia_pratico_do_vinho.pdf": "https://dl.dropboxusercontent.com/scl/fi/1tgk2ya57te1w06wubyrm/07.-Guia-Pr-tico-do-Vinho-autor-Lucas-Cordeiro.pdf?rlkey=hd71al1n1tsar6437vsd8x5ze&dl=0",
     "vinhos_sem_misterio.pdf": "https://dl.dropboxusercontent.com/scl/fi/r6749ha3sx0z5hd9pxn2y/Vinhos-sem-Misterio-Rafael-Roseira.pdf?rlkey=j9ostgruhxxtg6ybqcpezfe78&dl=0",
-    "guia_do_rio.pdf":"https://riotur.rio/wp-content/uploads/2024/08/Riotur_VisitRio_PocketGuide_85x125mm_miolo_SpecialEdition_BAIXA-4.pdf",
-    "wine-reviews.zip": "https://www.kaggle.com/api/v1/datasets/download/zynicide/wine-reviews"
+    "wine-reviews.zip": "https://www.kaggle.com/api/v1/datasets/download/zynicide/wine-reviews",
+    "portuguese_wines.csv":"https://github.com/pazzolini/portuguese-wine-vivino/raw/7fed8a2a0107a124bc906ca0eb85f1fe7beda5c6/pt_wine_merged.csv"
+}
 
-}  
-
-
+# Arquivos esperados dentro do ZIP
+WINE_FILES = {
+    "winemag-data-130k-v2.csv",
+    "winemag-data-130k-v2.json",
+    "winemag-data_first150k.csv"
+}
 
 def baixar_pdfs(destino="data/docs"):
     os.makedirs(destino, exist_ok=True)
 
     for nome, url in PDFS.items():
         caminho_arquivo = os.path.join(destino, nome)
-        if not os.path.exists(caminho_arquivo):
-            print(f" Baixando {nome}...")
 
+        # Lida com o ZIP separadamente
+        if nome.endswith(".zip"):
+            arquivos_faltando = [arq for arq in WINE_FILES if not os.path.exists(os.path.join(destino, arq))]
+            if not arquivos_faltando:
+                print("✅ Arquivos de wine já existem. Nenhum download necessário.")
+                continue
+
+            print("📦 Baixando e extraindo wine-reviews.zip...")
             response = requests.get(url)
-            if "zip" in nome:
-                with zipfile.ZipFile(BytesIO(response.content)) as z:
-                    z.extractall(destino)
-                    print(f"Arquivo {nome} extraído.")
-            else:
+            with zipfile.ZipFile(BytesIO(response.content)) as z:
+                z.extractall(destino)
+                print("✅ Arquivos de wine extraídos com sucesso.")
+        else:
+            # Baixar PDFs normalmente
+            if not os.path.exists(caminho_arquivo):
+                print(f"📥 Baixando {nome}...")
+                response = requests.get(url)
                 with open(caminho_arquivo, "wb") as f:
                     f.write(response.content)
-        else:
-            print(f" {nome} já existe.")
+                print(f"✅ {nome} baixado.")
+            else:
+                print(f"✔️ {nome} já existe.")
