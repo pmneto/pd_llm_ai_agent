@@ -6,6 +6,8 @@ from rag.indexer import load_vector_index  # Supondo que exista para carregar FA
 from tools.weather_tool import consultar_clima
 from langchain.memory import ConversationBufferMemory
 from tools.search_tool import DuckDuckGoSearch
+from tools.getday import get_today
+
 
 search = DuckDuckGoSearch()
 
@@ -45,6 +47,11 @@ tools = [
         name="DuckDuckgoPesquisa",
         func=search.busca_duckduckgo,
         description="Use this tool to perform real-time internet searches. Ideal when you need to fetch updated or external information not present in the documents."
+    ),
+    Tool(
+        name="DiaAtual",
+        func=get_today,
+        description="Use this tool to know which day is today. Ideal when you need referrence."
     )
 ]
 
@@ -54,7 +61,8 @@ prompt = ChatPromptTemplate.from_messages([
     ("system", carregar_prompt_base()),
      MessagesPlaceholder(variable_name="chat_history"),
     ("user", "{input}"),
-    MessagesPlaceholder(variable_name="agent_scratchpad")
+    MessagesPlaceholder(variable_name="agent_scratchpad"),
+    
 ])
 
 # Modelo

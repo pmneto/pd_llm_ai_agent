@@ -28,20 +28,32 @@ def get_weather_forecast(latitude, longitude):
         hoje = datetime.today().strftime("%Y-%m-%d")
         idx_hoje = diario["time"].index(hoje) if hoje in diario["time"] else 0
 
-        max_temp = diario["temperature_2m_max"][idx_hoje]
-        min_temp = diario["temperature_2m_min"][idx_hoje]
-        chuva = diario["precipitation_sum"][idx_hoje]
         atual_temp = atual.get("temperature", "indisponível")
         vento = atual.get("windspeed", "indisponível")
 
-        resumo = (
+        resumo_atual = (
             f"📍 Clima atual na sua região:\n"
             f"- Temperatura agora: {atual_temp}°C\n"
-            f"- Máxima do dia: {max_temp}°C | Mínima: {min_temp}°C\n"
-            f"- Precipitação esperada: {chuva} mm\n"
-            f"- Velocidade do vento: {vento} km/h"
+            f"- Velocidade do vento: {vento} km/h\n"
         )
-        return resumo
+
+        # Previsão para os próximos 3 dias (incluindo hoje)
+        previsoes = "\n🗓️ Previsão para os próximos dias:\n"
+        dias_para_prever = min(3, len(diario["time"]))  # segurança
+
+        for i in range(idx_hoje, idx_hoje + dias_para_prever):
+            data_dia = datetime.strptime(diario["time"][i], "%Y-%m-%d")
+            dia_semana = data_dia.strftime("%A").capitalize()
+            max_temp = diario["temperature_2m_max"][i]
+            min_temp = diario["temperature_2m_min"][i]
+            chuva = diario["precipitation_sum"][i]
+
+            previsoes += (
+                f"- {dia_semana} ({data_dia.strftime('%d/%m')}): "
+                f"máx {max_temp}°C, mín {min_temp}°C, chuva esperada: {chuva} mm\n"
+            )
+
+        return resumo_atual + previsoes
 
     except Exception as e:
         print(f"Erro ao obter clima: {e}")
