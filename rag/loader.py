@@ -40,10 +40,12 @@ def load_kaggle_csv():
     """
     caminho="data/docs/winemag-data_first150k.csv"
     caminho2="data/docs/winemag-data-130k-v2.csv"
+
     df = pd.read_csv(caminho)
     df2 = pd.read_csv(caminho2)
 
     df = pd.merge(df, df2, how = 'outer')
+    df.head(5)
     documentos = []
     for _, row in df.iterrows():
         conteudo = f"{row.get('title', '')} - {row.get('description', '')}"

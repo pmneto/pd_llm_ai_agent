@@ -7,6 +7,7 @@ from tools.weather_tool import consultar_clima
 from langchain.memory import ConversationBufferMemory
 from tools.search_tool import DuckDuckGoSearch
 from tools.getday import get_today
+from tools.web_scrapper import scrappe_url
 
 
 search = DuckDuckGoSearch()
@@ -46,13 +47,16 @@ tools = [
     Tool(
         name="DuckDuckgoPesquisa",
         func=search.busca_duckduckgo,
-        description="Use this tool to perform real-time internet searches. Ideal when you need to fetch updated or external information not present in the documents."
+        description="Use this tool to perform real-time internet searches. Ideal when you need to fetch updated or external information not present in the documents, or within the model knowledge."
     ),
     Tool(
         name="DiaAtual",
         func=get_today,
         description="Use this tool to know which day is today. Ideal when you need referrence."
-    )
+    ), Tool(
+    name="RaspadordeURL",
+    description="Use this tool to web scrappe an URL.",
+    func=scrappe_url)
 ]
 
 
@@ -86,6 +90,7 @@ wine_search_chain = AgentExecutor(
     tools=tools,
     memory=memory,
     verbose=True,
+    tool_choice="auto",
     return_only_outputs=True,
     output_keys=["output"]
 )

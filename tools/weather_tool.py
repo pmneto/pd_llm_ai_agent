@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 
 def get_location_by_ip():
+    '''Gets the Geolocation from the users IP'''
     try:
         res = requests.get("https://ipinfo.io/json")
         data = res.json()
@@ -13,6 +14,7 @@ def get_location_by_ip():
         return None
 
 def get_weather_forecast(latitude, longitude):
+    '''Gets the weather conditions for the next few days.'''
     try:
         url = (
             f"https://api.open-meteo.com/v1/forecast?"
@@ -60,6 +62,7 @@ def get_weather_forecast(latitude, longitude):
         return "❌ Não foi possível obter os dados climáticos no momento."
 
 def consultar_clima(_input=None):
+    '''Queries the weather conditions'''
     loc = get_location_by_ip()
     if loc:
         return get_weather_forecast(loc["latitude"], loc["longitude"])
