@@ -3,11 +3,12 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 from rag.searcher import search_context
 from rag.indexer import load_vector_index  # Supondo que exista para carregar FAISS/Chroma
-from tools.weather_tool import consultar_clima
+from tools.weather_tool import consultar_clima, get_location_by_ip
 from langchain.memory import ConversationBufferMemory
 from tools.search_tool import DuckDuckGoSearch
 from tools.getday import get_today
 from tools.web_scrapper import scrappe_url
+from tools.youtube_context_tool import query_youtube_video
 
 
 search = DuckDuckGoSearch()
@@ -56,7 +57,22 @@ tools = [
     ), Tool(
     name="RaspadordeURL",
     description="Use this tool to web scrappe an URL.",
-    func=scrappe_url)
+    func=scrappe_url),
+    Tool(
+    name="YouTubeVideoInfo",
+    func=query_youtube_video,
+    description="Use this tool to search YouTube videos and extract subtitles as context when relevant."
+),
+    Tool(
+        name="AchaLocalizacao",
+        func=get_location_by_ip,
+        description="Use this tool to find which location the user is talking from. Ideal when you need referrence."
+    ),
+    Tool(
+        name="ChecaEstacaoDoAno",
+        func=get_location_by_ip,
+        description="Use this tool to know which season is the user experiencing. Try always calling this method."
+    )
 ]
 
 

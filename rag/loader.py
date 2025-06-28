@@ -58,3 +58,21 @@ def load_kaggle_csv():
         }
         documentos.append(Document(page_content=conteudo, metadata=metadados))
     return documentos
+
+
+def load_zonasul_documents(caminho_json: str) -> list[Document]:
+    with open(caminho_json, "r", encoding="utf-8") as f:
+        vinhos = json.load(f)
+
+    documentos = []
+    for vinho in vinhos:
+        conteudo = (
+            f"{vinho['nome']}\n"
+            f"{vinho['descricao']}\n"
+            f"Preço: R${vinho['preco']}\n"
+            f"Marca: {vinho['marca']}\n"
+            f"Link: {vinho['url']}"
+        )
+        documentos.append(Document(page_content=conteudo, metadata={"fonte": "ZonaSul"}))
+    
+    return documentos

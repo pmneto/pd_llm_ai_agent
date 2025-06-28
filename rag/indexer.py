@@ -39,3 +39,10 @@ def load_vector_index(caminho_index=CAMINHO_INDEX):
     print(f"Índice vetorial carregado de: {caminho_index}")
 
     return index
+
+def create_zonasul_index(documentos, caminho_index="data/index_vinhos"):
+    embeddings = OpenAIEmbeddings()
+    index = FAISS.from_documents(documentos, embedding=embeddings)
+    index.save_local(caminho_index)
+    print(f"🔎 Índice vetorial salvo em {caminho_index}")
+    return index
