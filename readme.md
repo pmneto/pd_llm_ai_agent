@@ -2,7 +2,7 @@
 
 Bem-vindo ao **CariocaWine AI**, um agente inteligente feito com ❤️ no Rio de Janeiro. Ele funciona como um sommelier virtual com o jeitinho carioca, pronto para recomendar vinhos, harmonizações e informações sazonais de forma contextual, charmosa e divertida.
 
-**Motivação: Projeto de Disciplina - IA generativa para linguagem (Large Language Model)**
+**Motivação: Projeto de Disciplina - IA generativa para linguagem (Large Language Model) | MIT - Inteligência Artificial, Machine Learning & Deep Learning - Instituto Infnet**
 
 
 ---
@@ -34,8 +34,8 @@ Este projeto usa:
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/agent-wine.git
-cd agent-wine
+git clone https://github.com/pmneto/pd_llm_ai_agent.git
+cd YOUR_DIR
 ```
 
 2. Crie um ambiente virtual e instale as dependências:
