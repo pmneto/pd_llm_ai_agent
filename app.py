@@ -19,7 +19,19 @@ st.set_page_config(page_title="CariocaWine", page_icon="🍷", layout="wide")
 
 INDEX_PATH = "data/index_faiss"
 
+def carregar_rag_zs():
+      if not os.path.isfile("data/docs/vinhos.json"):
+         zonasul = ZonaSulScraper()
+         html = zonasul.buscar_html()
+         vinhos = zonasul.extrair_vinhos_do_html(html)   
+         zonasul.salvar_como_json()
+      else:
+         print("rag do zona sul já carregada.")
+   
+
+
 def preparar_indice():
+
     if not os.path.exists(INDEX_PATH) or not os.path.exists(os.path.join(INDEX_PATH, "index.faiss")):
         baixar_pdfs("data/docs")
         chunks = load_docs("data/docs")
@@ -30,20 +42,11 @@ def preparar_indice():
 
 def main():
 
-    try:    
-        zonasul = ZonaSulScraper()
-        html = zonasul.buscar_html()
-        vinhos = zonasul.extrair_vinhos_do_html(html)
-        if not os.path.isfile("data/docs/vinhos.json"):
-         zonasul.salvar_como_json()
-        else:
-         print("rag do zona sul já carregada.")
-         pass   
-    except ValueError:
-        raise ValueError
     
-    finally:    
-
+        
+      
+        carregar_rag_zs()
+        
         preparar_indice()
 
 

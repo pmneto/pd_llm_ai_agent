@@ -1,12 +1,12 @@
 from datetime import date
 from tools.weather_tool import get_location_by_ip  # reaproveita seu código!
 
-def inferir_estacao_por_geolocalizacao(data: date = None) -> str:
+def inferir_estacao_por_geolocalizacao(_input: str = None) -> str:
     """
-    Infere a estação do ano com base na latitude da geolocalização do usuário.
+    Checks the season based on geolocation
     """
-    if data is None:
-        data = date.today()
+   
+    data = date.today()
 
     try:
         local = get_location_by_ip()

@@ -5,7 +5,7 @@ from urllib.parse import unquote
 class DuckDuckGoSearch:
     @staticmethod
     def extrair_conteudo(url, max_chars=700):
-        """Raspa o conteúdo principal de um site para usar como contexto."""
+        """Scraps the website content"""
         try:
             headers = {"User-Agent": "Mozilla/5.0"}
             res = requests.get(url, headers=headers, timeout=10)
@@ -18,7 +18,7 @@ class DuckDuckGoSearch:
 
     @staticmethod
     def busca_duckduckgo(query: str) -> str:
-        """Busca e formata resultados do DuckDuckGo com conteúdo raspado."""
+        """Searches and format the query outcomes"""
         try:
             headers = {"User-Agent": "Mozilla/5.0"}
             url = f"https://html.duckduckgo.com/html/?q={query}"
@@ -30,9 +30,9 @@ class DuckDuckGoSearch:
                 return "Nenhum resultado encontrado."
 
             resposta = "🔎 Resultados da busca DuckDuckGo com contexto:\n\n"
-            for i, r in enumerate(resultados[:3]):  # Limita para performance
+            for i, r in enumerate(resultados[:5]):  # Limita para performance
                 titulo = r.get_text(strip=True)
-                raw_link = r.get("href", "")
+                raw_link = r.get("href", "").split('&rut=')[0]
                 link_real = unquote(raw_link.split("uddg=")[-1]) if "uddg=" in raw_link else raw_link
 
                 # Agora sim, aqui chamamos o raspador

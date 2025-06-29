@@ -9,6 +9,19 @@ from tools.search_tool import DuckDuckGoSearch
 from tools.getday import get_today
 from tools.web_scrapper import scrappe_url
 from tools.youtube_context_tool import query_youtube_video
+from tools.seasons_tool import inferir_estacao_por_geolocalizacao
+from langchain.tools import StructuredTool
+
+
+
+#geolocation
+acha_localizacao_tool = StructuredTool.from_function(
+    func=get_location_by_ip,
+    name="AchaLocalizacao",
+    description="Use this tool to find the user's geolocation using their IP. No input is needed."
+)
+
+
 
 
 search = DuckDuckGoSearch()
@@ -64,13 +77,8 @@ tools = [
     description="Use this tool to search YouTube videos and extract subtitles as context when relevant."
 ),
     Tool(
-        name="AchaLocalizacao",
-        func=get_location_by_ip,
-        description="Use this tool to find which location the user is talking from. Ideal when you need referrence."
-    ),
-    Tool(
         name="ChecaEstacaoDoAno",
-        func=get_location_by_ip,
+        func=inferir_estacao_por_geolocalizacao,
         description="Use this tool to know which season is the user experiencing. Try always calling this method."
     )
 ]
@@ -86,7 +94,7 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 # Modelo
-llm = ChatOpenAI(temperature=0.6)
+llm = ChatOpenAI(temperature=0.7)
 
 # Agente com funções
 agent = create_openai_functions_agent(llm=llm, tools=tools, prompt=prompt)
@@ -98,6 +106,9 @@ def build_agent():
     from utils.download_docs import baixar_pdfs
     baixar_pdfs()
     return wine_search_chain
+
+#concat all tools
+tools.append(acha_localizacao_tool)
 
 
 # Executor com retorno limpo

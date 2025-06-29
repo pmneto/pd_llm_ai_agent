@@ -5,7 +5,7 @@ from io import BytesIO
 
 PDFS = {
     "guia_pratico_do_vinho.pdf": "https://dl.dropboxusercontent.com/scl/fi/1tgk2ya57te1w06wubyrm/07.-Guia-Pr-tico-do-Vinho-autor-Lucas-Cordeiro.pdf?rlkey=hd71al1n1tsar6437vsd8x5ze&dl=0",
-    "vinhos_sem_misterio.pdf": "https://dl.dropboxusercontent.com/scl/fi/r6749ha3sx0z5hd9pxn2y/Vinhos-sem-Misterio-Rafael-Roseira.pdf?rlkey=j9ostgruhxxtg6ybqcpezfe78&dl=0",
+    "manual_producao_vinhos.pdf": "https://dl.dropboxusercontent.com/scl/fi/6g5ar7bli1b63uvcw14rs/02.-Manual-de-produ-o-de-uvas-autor-Bento-Gon-ales.pdf?rlkey=hhtsh6yscyfzuvvq477kbpmd7&dl=0",
     "wine-reviews.zip": "https://www.kaggle.com/api/v1/datasets/download/zynicide/wine-reviews",
     "portuguese_wines.csv":"https://github.com/pazzolini/portuguese-wine-vivino/raw/7fed8a2a0107a124bc906ca0eb85f1fe7beda5c6/pt_wine_merged.csv"
 }

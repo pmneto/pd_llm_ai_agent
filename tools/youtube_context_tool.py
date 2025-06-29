@@ -33,7 +33,7 @@ def extract_subtitles(video_id: str) -> Optional[str]:
         return None
 
 def query_youtube_video(prompt: str) -> str:
-    """Busca vídeo e retorna link + legenda curta."""
+    """Searches a video and extracts a small piece of subtitles"""
     video_id = extract_video_id(prompt)
     if not video_id:
         return "❌ Não consegui encontrar um vídeo correspondente."

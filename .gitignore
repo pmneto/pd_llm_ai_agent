@@ -2,3 +2,16 @@
 .env
 .devcontainer/
 .devcontainer/
+
+
+
+# Ignorar arquivos compactados
+*.zip
+
+# Ignorar arquivos de log ou temporários
+*.log
+*.tmp
+
+# Ignorar notebooks convertidos ou cache de Streamlit
+.ipynb_checkpoints/
+.streamlit/
